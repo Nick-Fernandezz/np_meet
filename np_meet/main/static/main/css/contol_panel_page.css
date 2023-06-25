@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+.corp-logo {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+
+}

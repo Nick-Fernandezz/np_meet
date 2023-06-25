@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Control Panel{% endblock title %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/contol_panel_page.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <div class="user-profil">
+          <img src="{{user.avatar.url}}" alt="">
+          <h5>{{user.position.title}}</h5>
+          <h3>{{user.get_username}}</h3>
+          <h4>{{user.first_name}} {{user.last_name}}</h4>
+        </div>  
+    </div>
+    <div class="col">
+        
+    </div>
+</div>
+
+{% endblock content %}

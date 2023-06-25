@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Create Invite{% endblock title %}
+
+{% block head %}{% endblock head %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-outline-info">Создать</button>
+</form>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>  
+{% endif %}
+
+
+{% endblock content %}

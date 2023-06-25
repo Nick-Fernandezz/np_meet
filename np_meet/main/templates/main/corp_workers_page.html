@@ -1,0 +1,94 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Workers{% endblock title %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'main/css/corp_workers_page.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+<div class="container">
+  <div class="text-center">
+    <a href="{% url 'create_worker_invite' %}" class="btn btn-outline-success invite-worker">
+        Пригласить сотрудника
+    </a>
+  </div>
+    
+  <div class="row">
+      <div class="col-6">
+          <div class="workers">
+            <h3>Текущие работники</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Имя</th>
+                      <th scope="col">Почта</th>
+                      <th scope="col">Телефон</th>
+                      <th scope="col">Должность</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Последний вход</th>
+                      <th scope="col">Дата регистрации</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for worker in workers %}
+                    <tr>
+                      <th scope="row">{{worker.id}}</th>
+                      <td>{{worker.username}} <a href="{% url 'profile_page' worker.id %}">(?)</a></td>
+                      <td>{{worker.first_name}} {{worker.last_name}}</td>
+                      <td>{{worker.email}}</td>
+                      <td>{{worker.phone}}</td>
+                      <td>
+                        {{worker.position}}
+                      </td>
+                      <td>{{worker.email}}</td>
+                      <td>{{worker.last_login}}</td>
+                      <td>{{worker.date_joined}}</td>
+                      
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                
+            </table>
+          </div>
+      </div>
+      <div class="col-6">
+          <div class="invites">
+            <h3>Активные приглашения</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Создатель</th>
+                      <th scope="col">Код приглашения</th>
+                      <th scope="col">Количество активаций</th>
+                      <th scope="col">Время создания</th>
+                      <th scope="col">Время последнего присоеденения</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for invite in invites %}
+                    <tr>
+                      <th scope="row">{{invite.id}}</th>
+                      <td>{{invite.creator}} <a href="{% url 'profile_page' invite.creator.id %}">(?)</a></td>
+                      <td>{{invite.code}}</td>
+                      <td>{{invite.activations}} / {{invite.max_activations}}</td>
+                      <td>{{invite.created_date}}</td>
+                      <td>{{invite.last_invite}}</td>
+                      <td><a href="{% url 'delete_worker_invite' invite.id %}" class="btn btn-outline-danger">Удалить</a></td>
+                      
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                
+            </table>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock content %}

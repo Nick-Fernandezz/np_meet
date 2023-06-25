@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+
+.workers, .invites {
+    overflow-x: scroll;
+}
