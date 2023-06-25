@@ -6,8 +6,10 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 # from django.contrib.auth import AnonymousUser
 from django.db import IntegrityError
 from .models import User, Corporations, CompInvites, LogsInvites
-from .forms import CreateCompanyForm, CreateWorckerInviteForm, JoinWorkerInviteForm
+from .forms import CreateCompanyForm, CreateWorckerInviteForm, JoinWorkerInviteForm, SingUPForm
 from .scripts.random_invite_code import random_code
+from django.contrib.auth.decorators import login_required
+# from django.http.response import HttpResponseNotFound
 
 
 # Create your views here.
@@ -48,18 +50,19 @@ def singup_user_page(request):
                 return redirect('home_page')
             else:
                 return render(request, 'main/singup_user_page.html', context={
-                    'form': UserCreationForm(),
+                    'form': SingUPForm(),
                     'error': errors['incorrectpassword'],
                     })      
         except IntegrityError:
             return render(request, 'main/singup_user_page.html', context={
-                        'form': UserCreationForm(),
+                        'form': SingUPForm(),
                         'error': errors['incorrectusername'],
                         })   
 
     else:
-        return render(request, 'main/singup_user_page.html', context={'form': UserCreationForm()})
+        return render(request, 'main/singup_user_page.html', context={'form': SingUPForm()})
     
+@login_required
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
@@ -78,7 +81,7 @@ def login_user_page(request):
             login(request, user)
             return redirect('control_palen_page')
 
-
+@login_required
 def control_palen_page(request):
     try:
         corp = Corporations.objects.get(name=request.user.corporation.name)
@@ -94,7 +97,7 @@ def control_palen_page(request):
     except:
         return render(request, 'main/contol_panel_page.html')
 
-
+@login_required
 def create_comp_page(request):
     if request.method == 'GET': 
         form = CreateCompanyForm()
@@ -113,7 +116,7 @@ def create_comp_page(request):
             return render(request, 'main/create_comp_page.html', context={'form': form, 'error': 'Введены некоректные данные'})
 
 
-
+@login_required
 def company_workers_page(request):
 
     workers = User.objects.filter(corporation=request.user.corporation)
@@ -123,7 +126,7 @@ def company_workers_page(request):
         'invites': invites,
     })
 
-
+@login_required
 def profile_page(request, user_id):
     user = get_object_or_404(User, id=user_id)
     director = False
@@ -134,7 +137,7 @@ def profile_page(request, user_id):
         'is_director': director,
     })
 
-
+@login_required
 def delete_worker_invite(request, invite_id):
     invite = CompInvites.objects.get(id=invite_id)
     log = LogsInvites.objects.create(
@@ -149,7 +152,7 @@ def delete_worker_invite(request, invite_id):
     # print(invite.code)
     return redirect('company_workers_page')
 
-
+@login_required
 def create_worker_invite(request):
     if request.method == 'GET':
         
@@ -180,7 +183,7 @@ def create_worker_invite(request):
             'error': 'Ошибка в параметрах. Максимум 250 активаций'
         })
 
-
+@login_required
 def join_worker_invite(request):
     if request.method == 'GET':
         return render(request, 'main/join_worker_invite_page.html', context={
@@ -209,7 +212,7 @@ def join_worker_invite(request):
                             'error': 'Код не существует',
                         })
 
-
+@login_required
 def fire_worker(request, user_id):
 
     if Corporations.objects.filter(directors=request.user).exists() and request.user.id != user_id:
@@ -223,9 +226,17 @@ def fire_worker(request, user_id):
     else:
         return profile_page(request, user_id)
 
+@login_required
+def company_profile_page(request, comp_id):
 
-def company_profil_page(request, comp_id):
+    if comp_id == request.user.corporation.id:
+        company = get_object_or_404(Corporations, id=comp_id)
 
-    company = get_object_or_404(Corporations, id=comp_id)
+        workers = User.objects.filter(corporation=comp_id)
 
-    return render(request, 'main/')
+        return render(request, 'main/company_profile_page.html', context={
+            'comp': company,
+            'workers': workers,
+        })
+    else:
+        redirect('control_palen_page')

@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+
+.workers {
+    overflow-x: hidden;
+}
+
+.table {
+    max-width: 90%;
+}
+
+.director > h4 > img {
+    border-radius: 50%;
+}
