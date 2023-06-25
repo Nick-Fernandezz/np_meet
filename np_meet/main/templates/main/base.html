@@ -10,37 +10,32 @@
     <title>{% block title %}NP Meet{% endblock title %}</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd; border-bottom: 1px solid #0dcaf0;">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home_page' %}">NP Meet</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="collapse navbar-collapse nav-bar" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="{% url 'home_page' %}">Home</a>
           <a class="nav-link" href="#">Features</a>
           <a class="nav-link" href="#">Pricing</a>
-            <div class="row justify-content-center align-items-center btns">
-              {% if user.is_authenticated %}
-              <div class="col-1">
-                  <form action="{% url 'logout_user' %}" method="POST">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-outline-info">Logout</button>
-                  </form>
-              </div>
-              {% else %}
-              <div class="col-1">
-                  <a href="{% url 'login_user_page' %}" class="btn btn-outline-info">Log in</a>
-              </div>
-              <div class="col-1">
-                  <a href="{% url 'singupuser_page' %}" class="btn btn-outline-light">Sing up</a>
-              </div>
-              {% endif %}
-              
           </div>
         </div>
+        
       </div>
+      <div class="row justify-content-center align-items-center btns">
+        {% if user.is_authenticated %}
+        <div class="col-12">
+            <form action="{% url 'logout_user' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-info btn-logout">Logout</button>
+            </form>
+        </div>
+
+        {% endif %} 
+      </div> 
     </div>
   </nav>
     {% block content %}

@@ -7,46 +7,49 @@
 {% endblock head %}
 
 {% block content %}
-<div class="row">
-    <div class="col">
-        <div class="user-profil">
-          <img src="{{user.avatar.url}}" alt="">
-          <h5>{{user.position.title}}</h5>
-          <h3>{{user.get_username}}</h3>
-          <h4>{{user.first_name}} {{user.last_name}}</h4>
-        </div>  
-    </div>
-    <div class="col">
-        {% if corp %}
-        <a href="">
-            <div class="row justify-content-end align-items-center">
-                
-                <div class="col-1">
-                    <div class="corp-logo" style="background-image: url('{{corp.logo.url}}');"></div>
-                    <!-- <img src="" alt="" width="60" height="60"> -->
+<div class='control-container'>
+    <div class="row">
+        <div class="col-3">
+            <div class="user-profil">
+                <div class='img-profil'>
+                    <img src="{{user.avatar.url}}" alt="">
                 </div>
-                <div class="col-2">
-                    <h4>{{corp.name}}</h4>
-                </div>
-                
-            </div>
-        </a>
-        <div class="row">
-            <h3>Сотрудники</h3>
-            <div class="col-2">
-                <a href="{% url 'company_workers_page' %}" class="btn btn-outline-success invite-worker">
-                    Сотрудники
-                </a>
-            </div>
+            <h5>{{user.position.title}}</h5>
+            <h3 class='worker-name'>@{{user.get_username}}</h3>
+            <h4 class='worker-name'>{{user.first_name}} {{user.last_name}}</h4>
+            </div>  
         </div>
-        {% else %}
-        <div class="login-or-register-comp">
+        <div class="col div-btn-company">
+            {% if corp %}
+            <a href="">
+                <div class="row justify-content-end align-items-center">
+                    <div class="col-1">
+                        <div class="corp-logo" style="background-image: url('{{corp.logo.url}}');"></div>
+                        <!-- <img src="" alt="" width="60" height="60"> -->
+                    </div>
+                    <div class="col-2">
+                        <h4>{{corp.name}}</h4>
+                    </div>
+                    
+                </div>
+            </a>
             <div class="row">
-                <div class="col-2"><a href="{% url 'join_worker_invite' %}" class="btn btn-outline-info">Join the company</a></div>
-                <div class="col-2"><a href="{% url 'create_comp_page' %}" class="btn btn-outline-light">Create Company</a></div>
+                <h3 class='worker'>Сотрудники</h3>
+                <div class="col-2">
+                    <a class='btn-worker' href="{% url 'company_workers_page' %}" class="btn btn-outline-success invite-worker ">
+                        Сотрудники
+                    </a>
+                </div>
             </div>
+            {% else %}
+            <div class="login-or-register-comp">
+                <div class="row btn-company">
+                    <div class="col-7 btn"><a href="{% url 'join_worker_invite' %}" class="btn btn-outline-info">Join the company</a></div>
+                    <div class="col-7 btn"><a href="{% url 'create_comp_page' %}" class="btn btn-outline-light">Create Company</a></div>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 

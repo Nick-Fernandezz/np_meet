@@ -32,7 +32,7 @@ class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     position = models.ManyToManyField(CorpPositions, blank=True)
-    corporation = models.ForeignKey(Corporations, on_delete=models.CASCADE, null=True)
+    corporation = models.ForeignKey(Corporations, on_delete=models.CASCADE, null=True, blank=True)
     reg_ip = models.GenericIPAddressField(verbose_name='IP при регистрации', blank=True, null=True)
     last_ip = models.GenericIPAddressField(verbose_name='IP последнего входа', blank=True, null=True)
     
