@@ -1,15 +1,31 @@
 {% extends 'main/base.html' %}
+{% load static %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/login_user_page.css' %}">
+{% endblock head %}
 
 {% block title %}Login{% endblock title %}
 
-{% block head %}{% endblock head %}
-
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit" class="btn btn-outline-info">Login</button>
-</form>
+<div class='div-container'>
+    <div class="col-4 div-form">
+        <form method="post">
+            {% csrf_token %}
+            {% comment %} {{form.as_p}} {% endcomment %}
+            {{form.username.label}}
+            <div class='user-name'>
+                {{form.username}}
+        `   </div>
+            {{form.password.label}}
+            <div class='pass-word'>
+                {{form.password}}
+            </div>
+            <button type="submit" class="btn btn-outline-info">Login</button>
+        </form>
+    </div>
+</div>
 
 {% if error %}
 <div class="alert alert-danger" role="alert">
