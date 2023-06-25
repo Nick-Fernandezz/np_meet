@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', views.logoutuser, name='logout_user'),
     path('controlpanel/', views.control_palen_page, name='control_palen_page'),
     path('company/create/', views.create_comp_page, name='create_comp_page'),
+    path('company/profile/<int:comp_id>/', views.company_profile_page, name='company_profil_page'),
     path('company/workers/profile/<int:user_id>/fire/>', views.fire_worker, name='fire_worker'),
     path('company/workers/profile/<int:user_id>', views.profile_page, name='profile_page'),
     path('company/workers/invites/delete/<int:invite_id>', views.delete_worker_invite, name='delete_worker_invite'),

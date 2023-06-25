@@ -21,7 +21,7 @@
         </div>
         <div class="col div-btn-company">
             {% if corp %}
-            <a href="">
+            <a href="{% url 'company_profil_page' corp.id %}">
                 <div class="row justify-content-end align-items-center">
                     <div class="col-1">
                         <div class="corp-logo" style="background-image: url('{{corp.logo.url}}');"></div>
