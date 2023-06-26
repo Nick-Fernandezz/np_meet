@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'channels',
     'main'
 ]
 
@@ -72,6 +73,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'np_meet.wsgi.application'
 
+
+# ASGI_APPLICATION = 'np_meet.asgi.application'
+
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("localhost", 6379)],
+#         },
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

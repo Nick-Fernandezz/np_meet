@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 # from django.contrib.auth import AnonymousUser
 from django.db import IntegrityError
 from .models import User, Corporations, CompInvites, LogsInvites
-from .forms import CreateCompanyForm, CreateWorckerInviteForm, JoinWorkerInviteForm, SingUPForm
+from .forms import *
 from .scripts.random_invite_code import random_code
 from django.contrib.auth.decorators import login_required
 # from django.http.response import HttpResponseNotFound
@@ -18,7 +18,6 @@ def index_page(request):
         return render(request, 'main/index.html')
     else:
         return redirect('control_palen_page')
-
 
 
 def singup_user_page(request):
@@ -240,3 +239,25 @@ def company_profile_page(request, comp_id):
         })
     else:
         redirect('control_palen_page')
+
+
+@login_required
+def edit_worker_profile(request):
+    user = get_object_or_404(User, id=request.user.id)
+    if request.method == 'GET':
+        form = EditUserForm(instance=request.user)
+        print(request.user.id)
+        return render(request, 'main/edit_worker_profile_page.html', context={
+            'form': form
+        })
+    else:
+        form = EditUserForm(data=request.POST, files=request.FILES, instance=request.user)
+        print(form)
+        if form.is_valid():
+            form.save()
+            return redirect('control_palen_page')
+        else:
+            # return render(request, 'main/edit_worker_profile_page.html', context={
+            # 'form': EditUserForm(instance=request.user)
+            # })
+            pass

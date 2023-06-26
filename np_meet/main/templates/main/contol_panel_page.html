@@ -13,6 +13,7 @@
             <div class="user-profil">
                 <div class='img-profil'>
                     <img src="{{user.avatar.url}}" alt="">
+                    <span class="edit_btn"><a href="{% url 'edit_worker_profile' %}"><img src="{% static 'main/images/edit_logo.png' %}" alt="" height="32" width="32"></a></span>
                 </div>
             <h5>{{user.position.title}}</h5>
             <h3 class='worker-name'>@{{user.get_username}}</h3>

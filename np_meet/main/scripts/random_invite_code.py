@@ -9,9 +9,10 @@ def random_code() -> str:
 
     code = ''
 
-    for _ in range(random.randint(10, 50)):
+    for _ in range(random.randint(10, 30)):
+        
         code += random.choice(characters)
-
+    print(len(code))
     if CompInvites.objects.filter(code=code).exists():
         random_code()
     

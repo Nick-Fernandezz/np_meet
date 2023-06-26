@@ -101,3 +101,27 @@
     padding-right: 35px;
     padding-left: 35px;
 }
+
+
+.edit_btn {
+    /* display: none; */
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 10px;
+    /* border: 1px #fff solid; */
+    border-radius: 50%;
+    z-index: 3;
+    background-color: #fff;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.img-profil:hover > img {
+    filter: brightness(0.6) blur(5px);
+}
+
+.img-profil:hover > .edit_btn {
+    /* display: inline; */
+    opacity: 1;
+}

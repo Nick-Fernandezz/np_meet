@@ -29,3 +29,16 @@ class SingUPForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2")
 
+
+
+class EditUserForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('avatar', 
+                  'username', 
+                  'first_name', 
+                  'last_name', 
+                  'birth_date',
+                  'phone')
+        

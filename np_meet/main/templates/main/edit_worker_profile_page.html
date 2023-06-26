@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Sing up{% endblock title %}
+
+{% block head %}{% endblock head %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div><img src="{{user.avatar.url}}" alt="Avatar" width="500" height="500"></div>
+    {{form.avatar}}
+    {{form.username.label}}
+    {{form.username}}
+    {{form.first_name.label}}
+    {{form.first_name}}
+    {{form.last_name.label}}
+    {{form.last_name}}
+    {{form.birth_date.label}}
+    {{form.birth_date}}
+    {{form.phone.label}}
+    {{form.phone}}
+    <button type="submit" class="btn btn-outline-info">Save</button>
+</form>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>  
+{% endif %}
+
+{% endblock content %}
