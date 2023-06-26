@@ -14,6 +14,7 @@
 }
 
 .btn-worker {
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,8 +23,30 @@
     color: #0dcaf0;
     border:1px solid #0dcaf0;
     padding-top: 10px;
-    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
 }
+
+.btn-worker:hover {
+    background-color: #0dcaf0;
+    border: 1px solid black;
+    color: black;
+    transition-duration: 1s;
+}
+
+.name-corp {
+    text-decoration: none;
+    user-select: none;
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 37px;
+}
+
+.name-corp:hover {
+    color:#0dcaf0;
+    transition-duration: 1s;
+}
+
 .control-container{
     padding: 50px;
 }
@@ -49,6 +72,7 @@
 }
 
 .corp-logo {
+    margin-right: 2vw;
     position: relative;
     width: 60px;
     height: 60px;
