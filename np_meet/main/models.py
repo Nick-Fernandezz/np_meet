@@ -58,18 +58,3 @@ class CompInvites(models.Model):
     def __str__(self) -> str:
         return str(self.code)
     
-
-class LogsInvites(models.Model):
-
-    company = models.ForeignKey(Corporations, on_delete=models.DO_NOTHING, verbose_name='компания')
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
-    code = models.CharField(max_length=100, verbose_name='Код приглашения')
-    do = models.TextField(verbose_name='Действие', max_length=300, default='')
-    created_date = models.DateTimeField(verbose_name='Время', auto_now_add=True)
-
-    class Meta:
-        verbose_name =  'лог приглашения'
-        verbose_name_plural = 'Логи приглашений'
-
-    def __str__(self) -> str:
-        return self.code
