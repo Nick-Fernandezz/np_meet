@@ -230,7 +230,7 @@ def join_worker_invite(request):
                     user_comp = User.objects.get(username=request.user.username)
                     user_comp.corporation = invite.company
                     log = LogsInvites.objects.create(
-                        company=request.user.corporation,
+                        company=user_comp.corporation,
                         creator=invite.creator,
                         code=invite.code,
                         do='Создал приглашение'
@@ -283,7 +283,6 @@ def company_profile_page(request, comp_id):
 
 @login_required
 def edit_worker_profile(request):
-    user = get_object_or_404(User, id=request.user.id)
     if request.method == 'GET':
         form = EditUserForm(instance=request.user)
         print(request.user.id)
@@ -297,9 +296,9 @@ def edit_worker_profile(request):
             form.save()
             return redirect('control_palen_page')
         else:
-            # return render(request, 'main/edit_worker_profile_page.html', context={
-            # 'form': EditUserForm(instance=request.user)
-            # })
-            pass
+            return render(request, 'main/edit_worker_profile_page.html', context={
+            'form': EditUserForm(instance=request.user),
+            'error': 'Ошибка в введенных данных'
+            })
 
 
