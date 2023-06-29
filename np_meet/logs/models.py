@@ -20,7 +20,7 @@ class LogsInvites(models.Model):
 
 
 class LogAuthUser(models.Model):
-    company = models.ForeignKey(Corporations, on_delete=models.DO_NOTHING, verbose_name='компания', null=True, blank=True )
+    company = models.ForeignKey(Corporations, on_delete=models.DO_NOTHING, verbose_name='компания', null=True)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
     date_login = models.DateTimeField(auto_now_add=True, verbose_name='Дата входа')
     do = models.CharField(max_length=100, verbose_name='Действие', default='')
