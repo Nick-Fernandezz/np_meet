@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 from main import urls as main_urls
+from logs import urls as log_urls
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(main_urls))
+    path('', include(main_urls)),
+    path('logs/', include(log_urls))
 
 ]

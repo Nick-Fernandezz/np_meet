@@ -73,12 +73,7 @@ class CompInvites(admin.ModelAdmin):
     list_filter = ('company', 'activations', 'max_activations', 'is_active')
     readonly_fields = ('created_date', 'last_invite')
 
-@admin.register(LogsInvites)
-class LogsInvitesChanch(admin.ModelAdmin):
-    list_display = ('id', 'company', 'creator', 'code', 'do', 'created_date')
-    list_display_links = ('id',)
-    readonly_fields = ('id', 'company', 'creator', 'code', 'do', 'created_date')
-    search_fields = ('id', 'company', 'creator', 'code', 'do', 'created_date')
+
 
 
 admin.site.register(Corporations)

@@ -1,0 +1,36 @@
+{% extends 'logs/base.html' %}
+
+{% block content %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Компания</th>
+        <th scope="col">Пользователь</th>
+        <th scope="col">Код приглашения</th>
+        <th scope="col">Действие</th>
+        <th scope="col">Время</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <th scope="row">{{log.id}}</th>
+            <td>{{log.user.corporation}}</td>
+            
+            {% if log.code %}
+            <td>{{log.code}}</td>
+            {% else %}
+            <td>-</td>
+            {% endif %}
+            <td>{{log.user}}</td>
+            <td>{{log.do}}</td>
+            <td>{{log.date_login}}</td>
+          </tr>
+        {% endfor %}
+      
+    </tbody>
+</table>
+
+{% endblock content %}

@@ -58,6 +58,7 @@ class CompInvites(models.Model):
     def __str__(self) -> str:
         return str(self.code)
     
+<<<<<<< HEAD
 
 class LogsInvites(models.Model):
 
@@ -90,3 +91,5 @@ class Tasks(models.Model):
     def __str__(self) -> str:
         return self.task[:20]
     
+=======
+>>>>>>> 27000d6e5ef1f7fccc6282ea6bc3eee873170253

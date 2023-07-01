@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 # from django.contrib.auth import AnonymousUser
 from django.db import IntegrityError
-from .models import User, Corporations, CompInvites, LogsInvites
+from .models import *
+from logs.models import *
 from .forms import *
 from .scripts.random_invite_code import random_code
 from django.contrib.auth.decorators import login_required
@@ -44,6 +45,11 @@ def singup_user_page(request):
                 else:
                     ip = request.META.get('REMOTE_ADDR')
                 user.reg_ip, user.last_ip = ip, ip
+                log_auth = LogAuthUser.objects.create(
+                    user=user,
+                    do='Зарегистрировался'
+                )
+                log_auth.save()
                 user.save()
                 login(request, user)
                 return redirect('home_page')
@@ -64,6 +70,12 @@ def singup_user_page(request):
 @login_required
 def logoutuser(request):
     if request.method == 'POST':
+        log_auth = LogAuthUser.objects.create(
+                    company=request.user.corporation,
+                    user=request.user,
+                    do='Вышел из аккаунта'
+                )
+        log_auth.save()
         logout(request)
         return redirect('home_page')
 
@@ -77,11 +89,23 @@ def login_user_page(request):
             return render(request, 'main/login_user_page.html', context={'form': AuthenticationForm(), 
                                                                          'error': 'Пользователь с таким именем не найден'})
         else:
+            log_auth = LogAuthUser.objects.create(
+                    company=user.corporation,
+                    user=user,
+                    do='Авторизировался'
+                )
+            log_auth.save()
             login(request, user)
             return redirect('control_palen_page')
 
 @login_required
 def control_palen_page(request):
+    log_auth = LogAuthUser.objects.create(
+                    company=request.user.corporation,
+                    user=request.user,
+                    do='Зашел в контрольную панель'
+                )
+    log_auth.save()
     try:
         corp = Corporations.objects.get(name=request.user.corporation.name)
         # print(corp)
@@ -171,6 +195,14 @@ def create_worker_invite(request):
                 creator=request.user,
                 code=random_code()
                 ) 
+            log = LogsInvites.objects.create(
+                company=request.user.corporation,
+                creator=request.user,
+                code=new_invite.code,
+                do='Создал приглашение'
+
+            )
+            log.save()
             # new_invite.max_activations = max_activationsForm
             # new_invite.company = request.user.comporation
             # new_invite.creator = request.user
@@ -197,6 +229,14 @@ def join_worker_invite(request):
                     invite.activations = invite.activations + 1
                     user_comp = User.objects.get(username=request.user.username)
                     user_comp.corporation = invite.company
+                    log = LogsInvites.objects.create(
+                        company=user_comp.corporation,
+                        creator=invite.creator,
+                        code=invite.code,
+                        do='Создал приглашение'
+
+                    )
+                    log.save()
                     invite.save()
                     user_comp.save()
                     return redirect('control_palen_page')
@@ -243,7 +283,6 @@ def company_profile_page(request, comp_id):
 
 @login_required
 def edit_worker_profile(request):
-    user = get_object_or_404(User, id=request.user.id)
     if request.method == 'GET':
         form = EditUserForm(instance=request.user)
         print(request.user.id)
@@ -257,7 +296,9 @@ def edit_worker_profile(request):
             form.save()
             return redirect('control_palen_page')
         else:
-            # return render(request, 'main/edit_worker_profile_page.html', context={
-            # 'form': EditUserForm(instance=request.user)
-            # })
-            pass
+            return render(request, 'main/edit_worker_profile_page.html', context={
+            'form': EditUserForm(instance=request.user),
+            'error': 'Ошибка в введенных данных'
+            })
+
+
