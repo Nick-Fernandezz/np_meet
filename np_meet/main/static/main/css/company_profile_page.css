@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-
 .workers {
     overflow-x: hidden;
 }
@@ -9,6 +8,50 @@
     max-width: 90%;
 }
 
-.director > h4 > img {
+.director {
     border-radius: 50%;
+    
+}
+
+.image-comp {
+    height: 100%;
+    
+}
+
+.comp-profil {
+    margin-right: 3vw;
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid #0dcaf0;
+
+}
+
+.div-comp-director {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: start;
+}
+
+.title-director {
+    width: 40%;
+    font-size: 30px;
+    color: white;
+    font-family: 'Montserrat';
+    margin-bottom: 20px;
+}
+
+.name-director {
+    font-size: 20px;
+    color: white;
+    font-family: 'Montserrat';
+
+}
+
+.name-director:hover {
+    color: #0dcaf0;
+    transition: 0.5s;
 }

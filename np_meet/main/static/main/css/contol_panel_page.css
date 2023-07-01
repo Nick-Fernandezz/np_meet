@@ -121,7 +121,24 @@
     filter: brightness(0.6) blur(5px);
 }
 
+
 .img-profil:hover > .edit_btn {
     /* display: inline; */
     opacity: 1;
 }
+
+.title-comp {
+    font-size: 30px;
+    color: white;
+}
+
+.link-comp {
+    text-decoration: none;
+    user-select: none;
+}
+
+.title-comp:hover {
+    color: #0dcaf0;
+    transition: 0.3s;
+}
+

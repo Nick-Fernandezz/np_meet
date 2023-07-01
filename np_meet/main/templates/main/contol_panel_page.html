@@ -22,16 +22,15 @@
         </div>
         <div class="col div-btn-company">
             {% if corp %}
-            <a href="{% url 'company_profil_page' corp.id %}">
+            <a class="link-comp" href="{% url 'company_profil_page' corp.id %}">
                 <div class="row justify-content-end align-items-center">
-                    <div class="col-2 corp-logo">
+                    <div class="col-1 corp-logo">
                         <div class="corp-logo" style="background-image: url('{{corp.logo.url}}');"></div>
                         <!-- <img src="" alt="" width="60" height="60"> -->
                     </div>
-                    <div class="col-2" >
-                        <h4>{{corp.name}}</h4>
+                    <div class="col-2 title-comp">
+                        <h4 class="title-comp">{{corp.name}}</h4>
                     </div>
-                    
                 </div>
             </a>
             <div class="row">

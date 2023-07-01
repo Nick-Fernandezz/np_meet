@@ -73,3 +73,20 @@ class LogsInvites(models.Model):
 
     def __str__(self) -> str:
         return self.code
+    
+
+class Tasks(models.Model):
+    company = models.ForeignKey(Corporations, on_delete=models.CASCADE, verbose_name='Компания')
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Поручитель')
+    worker = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Работник')
+    task = models.TextField(verbose_name='Задача')
+    created_date = models.DateTimeField(verbose_name='Дата поручения', auto_now_add=True)
+    deadline = models.DateTimeField(verbose_name='Дедлайн')
+
+    class Meta:
+        verbose_name = 'задача'
+        verbose_name_plural = 'Задачи'
+    
+    def __str__(self) -> str:
+        return self.task[:20]
+    
