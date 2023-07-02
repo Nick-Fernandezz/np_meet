@@ -58,38 +58,27 @@ class CompInvites(models.Model):
     def __str__(self) -> str:
         return str(self.code)
     
-<<<<<<< HEAD
-
-class LogsInvites(models.Model):
-
-    company = models.ForeignKey(Corporations, on_delete=models.DO_NOTHING, verbose_name='компания')
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
-    code = models.CharField(max_length=100, verbose_name='Код приглашения')
-    do = models.TextField(verbose_name='Действие', max_length=300, default='')
-    created_date = models.DateTimeField(verbose_name='Время', auto_now_add=True)
-
-    class Meta:
-        verbose_name =  'лог приглашения'
-        verbose_name_plural = 'Логи приглашений'
-
-    def __str__(self) -> str:
-        return self.code
-    
-
 class Tasks(models.Model):
+
+    status_option = (
+        ('done', 'Выполнено'),
+        ('in_process', 'В процессе'),
+        ('in_start', 'Не начат'),
+    )
+
     company = models.ForeignKey(Corporations, on_delete=models.CASCADE, verbose_name='Компания')
-    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Поручитель')
-    worker = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Работник')
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Поручитель', related_name='user_creator')
+    worker = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Работник', related_name='user_worker')
     task = models.TextField(verbose_name='Задача')
+    status = models.CharField(choices=status_option, max_length=50, default=status_option[2][0])
+    is_new = models.BooleanField(verbose_name='Новая', default=True)
     created_date = models.DateTimeField(verbose_name='Дата поручения', auto_now_add=True)
     deadline = models.DateTimeField(verbose_name='Дедлайн')
 
     class Meta:
-        verbose_name = 'задача'
+        verbose_name = 'задачу  '
         verbose_name_plural = 'Задачи'
     
     def __str__(self) -> str:
         return self.task[:20]
     
-=======
->>>>>>> 27000d6e5ef1f7fccc6282ea6bc3eee873170253

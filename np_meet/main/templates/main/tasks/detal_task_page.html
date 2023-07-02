@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{% endblock title %}
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <span>{{task.created_date}} - <b>{{task.deadline}}</b></span>
+                <form method="post" id="StatusForm">
+                    {% csrf_token %}
+                    <select name="status" onchange="document.getElementById('StatusForm').submit()">
+                        {% for status in statuses %}
+                        {% if status.0 == task.status %}
+                        <option value="{{status.0}}" selected>{{status.1}}</option>
+                        {% else %}
+                        <option value="{{status.0}}">{{status.1}}</option>
+                        {% endif %}
+                        
+                        {% endfor %}
+                        
+                    </select>
+                </form>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{task.task|safe}}</p>
+                <footer class="blockquote-footer">
+                    <a class='user-link' href="{% url 'profile_page' task.creator.id %}">
+                        <img src="{{task.creator.avatar.url}}" width="25" height="25">
+                        {{task.creator.first_name}} {{task.creator.last_name}}
+                    </a>
+                </footer>
+                <a href="{% url 'index_tasks_page' %}" class="btn btn-primary">&#10094;</a>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}

@@ -302,3 +302,37 @@ def edit_worker_profile(request):
             })
 
 
+@login_required
+def index_tasks_page(request):
+    
+    return render(request, 'main/tasks/tasks_page.html', context={
+        'complete_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='done').order_by('deadline'),
+        'in_process_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='in_process').order_by('deadline'),
+        'in_start_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='in_start', is_new=False).order_by('deadline'),
+        'is_new': Tasks.objects.filter(company=request.user.corporation, worker=request.user, is_new=True).order_by('deadline')
+        
+    })
+
+
+@login_required
+def detal_task_page(request, task_id):
+    task = get_object_or_404(Tasks, company=request.user.corporation, worker=request.user, id=task_id)
+    if request.method == 'GET':
+        task.is_new = False
+        task.save()
+        return render(request, 'main/tasks/detal_task_page.html', context={
+            'task': task,
+            'statuses': Tasks.status_option
+        })
+    else:
+        status = request.POST['status']
+        task.status = status
+        task.save()
+        return render(request, 'main/tasks/detal_task_page.html', context={
+            'task': task,
+            'statuses': Tasks.status_option
+        })
+
+@login_required
+def hide_task(request, task_id):
+    pass

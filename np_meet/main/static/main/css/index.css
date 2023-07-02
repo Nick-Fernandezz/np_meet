@@ -1,2 +1,7 @@
 @charset "utf-8";
-
+.button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10vw;
+}
