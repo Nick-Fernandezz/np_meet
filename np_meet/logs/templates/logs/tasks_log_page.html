@@ -1,0 +1,74 @@
+{% extends 'logs/base.html' %}
+
+{% block title %}Логи приглашений{% endblock title %}
+
+{% block content %}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Текущие задачи</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Логи</button>
+    </li>
+    
+</ul>
+<div class="tab-content" id="pills-tabContent">
+<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Компания</th>
+            <th scope="col">Поручитель</th>
+            <th scope="col">Работник</th>
+            <th scope="col">Задача</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Дедлайн</th>
+            <th scope="col">Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <th scope="row">{{task.id}}</th>
+                <td>{{task.company}}</td>
+                <td>{{task.creator}}</td>
+                <td>{{task.worker}}</td>
+                <td>{{task.task|truncatechars:50}}</td>
+                <td>{{task.created_date}}</td>
+                <td>{{task.deadline}}</td>
+                <td>{{task.status}}</td>
+              </tr>
+            {% endfor %}
+          
+        </tbody>
+      </table>
+</div>
+<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Компания</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Действие</th>
+            <th scope="col">Время</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <th scope="row">{{log.id}}</th>
+                <td>{{log.company}}</td>
+                <td>{{log.user}}</td>
+                <td>{{log.do}}</td>
+                <td>{{log.date}}</td>
+              </tr>
+            {% endfor %}
+          
+        </tbody>
+      </table>
+</div>
+</div>
+    
+{% endblock content %}

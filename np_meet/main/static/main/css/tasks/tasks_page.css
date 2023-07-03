@@ -8,6 +8,7 @@
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
+    align-items: start;
 }
 
 .user-link {
@@ -95,3 +96,9 @@
     width: 20px;
 }
 
+
+.create-task {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}

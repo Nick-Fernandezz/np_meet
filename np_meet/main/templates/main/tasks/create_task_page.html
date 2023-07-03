@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{% endblock title %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/tasks/create_task_page.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+    <div class="container">
+        <form action="" method="post" class="task-form">
+            {% csrf_token %}
+            <div class="header-form">
+                <div class="worker">
+                    <h6>{{form.worker.label}}</h6>
+                    {{form.worker}}
+                </div>
+                <div class="deadline">
+                    <h6>{{form.deadline.label}}</h6>
+                    {{form.deadline}}
+                </div>
+                
+            </div>
+            <div class="task">
+                <div class="task-label">
+                    <h6>{{form.task.label}}</h6>
+                </div>
+                {{form.task}}
+            </div>
+            <div class="submit-task-btn">
+
+                <button type="submit">Отправить</button>
+            </div>
+        </form>
+    </div>
+    {% endblock content %}

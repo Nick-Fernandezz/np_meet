@@ -18,4 +18,12 @@ class LogAuthUserChanch(admin.ModelAdmin):
     list_display_links = ('id',)
     list_filter = ('do', 'date_login')
     readonly_fields = ('id', 'user', 'do', 'date_login', 'company')
-    search_fields = ('id', 'user__username', 'do', 'date_login')
+    search_fields = ('id', 'user__username', 'company__name', 'do', 'date_login')
+
+@admin.register(LogTasks)
+class LogTasksChanch(admin.ModelAdmin):
+    list_display = ('id', 'company', 'user', 'do', 'date')
+    list_display_links = ('id',)
+    list_filter = ('do', 'date')
+    readonly_fields = ('id', 'company', 'user', 'do', 'date')
+    search_fields = ('id', 'user__username', 'company__name', 'do', 'date')

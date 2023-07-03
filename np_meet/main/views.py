@@ -306,10 +306,31 @@ def edit_worker_profile(request):
 def index_tasks_page(request):
     
     return render(request, 'main/tasks/tasks_page.html', context={
-        'complete_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='done').order_by('deadline'),
-        'in_process_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='in_process').order_by('deadline'),
-        'in_start_tasks': Tasks.objects.filter(company=request.user.corporation, worker=request.user, status='in_start', is_new=False).order_by('deadline'),
-        'is_new': Tasks.objects.filter(company=request.user.corporation, worker=request.user, is_new=True).order_by('deadline')
+        'complete_tasks': Tasks.objects.filter(
+            company=request.user.corporation, 
+            worker=request.user, 
+            status='done', 
+            active=True
+        ).order_by('deadline'),
+        'in_process_tasks': Tasks.objects.filter(
+            company=request.user.corporation, 
+            worker=request.user, 
+            status='in_process', 
+            active=True
+        ).order_by('deadline'),
+        'in_start_tasks': Tasks.objects.filter(
+            company=request.user.corporation, 
+            worker=request.user, 
+            status='in_start', 
+            is_new=False, 
+            active=True
+        ).order_by('deadline'),
+        'is_new': Tasks.objects.filter(
+            company=request.user.corporation, 
+            worker=request.user, 
+            is_new=True, 
+            active=True
+        ).order_by('deadline')
         
     })
 
@@ -326,6 +347,12 @@ def detal_task_page(request, task_id):
         })
     else:
         status = request.POST['status']
+        log = LogTasks(
+                company=request.user.corporation,
+                user=request.user,
+                do=f'Изменил статус задачи #{task.id} c {task.status} на {status}'
+                )
+        log.save()
         task.status = status
         task.save()
         return render(request, 'main/tasks/detal_task_page.html', context={
@@ -335,4 +362,47 @@ def detal_task_page(request, task_id):
 
 @login_required
 def hide_task(request, task_id):
-    pass
+    if request.method == 'POST':
+        task = get_object_or_404(Tasks, company=request.user.corporation, worker=request.user, id=task_id)
+        task.active = False
+        log = LogTasks(
+                company=request.user.corporation,
+                user=request.user,
+                do=f'Скрыл задачу #{task.id}'
+                )
+        log.save()
+        task.save()
+        return redirect('index_tasks_page')
+
+
+@login_required
+def hidden_tasks_page(request):
+    return render(request, 'main/tasks/hidden_tasks_page.html', context={
+        'tasks': Tasks.objects.filter(
+            company=request.user.corporation, 
+            worker=request.user, 
+            active=False
+        ).order_by('deadline')
+    })
+
+
+@login_required
+def create_task_page(request):
+    if request.method == 'GET':
+        return render(request, 'main/tasks/create_task_page.html', context={
+            'form': CreateTaskForm(company=request.user.corporation)
+        })
+    else:
+        userform = CreateTaskForm(request.POST)
+        if userform.is_valid():
+            newtask = userform.save(commit=False)
+            newtask.creator = request.user
+            newtask.company = request.user.corporation
+            log = LogTasks(
+                company=newtask.company,
+                user=newtask.creator,
+                do=f'Создал задачу для @{newtask.worker.username}'
+                )
+            log.save()
+            newtask.save()
+            return redirect('index_tasks_page')

@@ -31,3 +31,17 @@ class LogAuthUser(models.Model):
         
     def __str__(self) -> str:
         return str(self.id)
+
+
+class LogTasks(models.Model):
+    company = models.ForeignKey(Corporations, on_delete=models.DO_NOTHING, verbose_name='компания', null=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
+    do = models.CharField(max_length=100, verbose_name='Действие', default='')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+
+    class Meta:
+        verbose_name =  'лог задачи'
+        verbose_name_plural = 'Логи задачь'
+    
+    def __str__(self) -> str:
+        return f'{self.user.username} | {self.do}'

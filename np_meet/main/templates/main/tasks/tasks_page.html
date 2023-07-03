@@ -104,7 +104,7 @@
         <table class="table">
             <thead>
                 <tr class="table-success">
-                <th scope="col">Выполнено</th>
+                <th scope="col">Выполнено <a href="{% url 'hidden_tasks_page' %}">(Скрытые)</a></th>
                 </tr>
             </thead>
             <tbody>
@@ -125,12 +125,13 @@
                                     </footer>
                                   <a href="{% url 'detal_task_page' task.id %}" class="btn btn-primary">Подробнее</a>
                                 </div>
-                                    <form action="" method="post" class="hide-btn">
-                                        
-                                        <button type="submit" class="hide-btn-link">
-                                            <img src="{% static 'main/images/hide_btn.png' %}" alt="">
-                                        </button>
-                                    </form>
+                                <form action="{% url 'hide_task' task.id %}" method="post" class="hide-btn">
+                                    {% csrf_token %}
+                                    <button type="submit" class="hide-btn-link">
+                                        <img src="{% static 'main/images/hide_btn.png' %}" alt="">
+                                    </button>
+                                </form>
+
                             </div>
                         </th>
                     </tr>
@@ -141,5 +142,10 @@
     </div>
 </div>
 
+<div class="create-task">
+    <a href="{% url 'create_task_page' %}">
+        <img src="{% static 'main/images/plus.png' %}" alt="" width="55">
+    </a>
+</div>
 
 {% endblock content %}

@@ -72,6 +72,7 @@ class Tasks(models.Model):
     task = models.TextField(verbose_name='Задача')
     status = models.CharField(choices=status_option, max_length=50, default=status_option[2][0])
     is_new = models.BooleanField(verbose_name='Новая', default=True)
+    active = models.BooleanField(verbose_name='Активная', default=True)
     created_date = models.DateTimeField(verbose_name='Дата поручения', auto_now_add=True)
     deadline = models.DateTimeField(verbose_name='Дедлайн')
 

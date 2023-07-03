@@ -24,6 +24,9 @@
                 <a class="nav-link" href="{% url 'auth_log_page' %}">Авторизация</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'tasks_log_page' %}">Задачи</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link disabled">Disabled</a>
               </li>
             </ul>
@@ -34,7 +37,7 @@
       <div class="container">
         <form method="get" class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Найти..." aria-label="Найти..." aria-describedby="button-addon2" name="q">
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Button</button>
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">&#128269;</button>
           
         </form>
         {% block content %}

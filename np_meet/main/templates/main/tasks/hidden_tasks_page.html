@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{% endblock title %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/tasks/tasks_page.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row justify_content-between">
+        {% for task in tasks %}
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        {{task.created_date}} - <b>{{task.deadline}}</b>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{task.task|truncatechars:100}}</p>
+                        <footer class="blockquote-footer">
+                            <a class='user-link' href="{% url 'profile_page' task.creator.id %}">
+                                <img src="{{task.creator.avatar.url}}" width="25" height="25">
+                                {{task.creator.first_name}} {{task.creator.last_name}}
+                            </a>
+                        </footer>
+                      <a href="{% url 'detal_task_page' task.id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}    
+        </div>
+        
+    </div>
+    {% endblock content %}
