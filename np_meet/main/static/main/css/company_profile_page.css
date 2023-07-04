@@ -8,16 +8,29 @@
     max-width: 90%;
 }
 
-.director {
+/* .director {
     border-radius: 50%;
     
-}
+} */
 
-.image-comp {
+/* .image-comp {
     height: 100%;
-    
+    width: 100%;
+} */
+
+.back-comp {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
 }
 
+
+.name-comp {
+    color: white;
+}
 .comp-profil {
     margin-right: 3vw;
     width: 300px;

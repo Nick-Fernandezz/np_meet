@@ -1,26 +1,30 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% block title %}Sing up{% endblock title %}
 
-{% block head %}{% endblock head %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/edit_worker_profile_page.css' %}">
+{% endblock head %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div><img src="{{user.avatar.url}}" alt="Avatar" width="500" height="500"></div>
-    {{form.avatar}}
-    {{form.username.label}}
-    {{form.username}}
-    {{form.first_name.label}}
-    {{form.first_name}}
-    {{form.last_name.label}}
-    {{form.last_name}}
-    {{form.birth_date.label}}
-    {{form.birth_date}}
-    {{form.phone.label}}
-    {{form.phone}}
-    <button type="submit" class="btn btn-outline-info">Save</button>
-</form>
+<div class='row img-form'>
+    <div class='col-4'><img src="{{user.avatar.url}}" alt="Avatar" width="450" height="450">
+        <div class='avatar'>{{form.avatar}}</div></div>
+    <form class="col-4 border-form" id="edit_worker_profile" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class='form_avatar'>{{form.username.label}}</div>
+        <div class='form_avatar'>{{form.username}}</div>
+        <div class='form_avatar'>{{form.first_name.label}}</div>
+        <div class='form_avatar'>{{form.first_name}}</div>
+        <div class='form_avatar'>{{form.last_name.label}}</div>
+        <div class='form_avatar'>{{form.last_name}}</div>
+        <div class='form_avatar'>{{form.birth_date.label}}</div>
+        <div class='form_avatar'>{{form.birth_date}}</div>
+        <div class='form_avatar'>{{form.phone.label}}</div>
+        <div class='form_avatar'>{{form.phone}}</div>
+        <div class="btn-save"><button type="submit" class="btn btn-outline-info btn-save">Сохранить</button></div>
+    </form>
+</div>
 
 {% if error %}
 <div class="alert alert-danger" role="alert">
