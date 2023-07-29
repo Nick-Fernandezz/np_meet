@@ -406,3 +406,27 @@ def create_task_page(request):
             log.save()
             newtask.save()
             return redirect('index_tasks_page')
+
+
+@login_required
+def mail_page(request):
+    chats = Chats.objects.filter(users__id__icontains=request.user.id).order_by('date_update')
+    # messages = Messages.objects.filter(chat=chats.first())
+    return render(request, 'main/mail/index_mail_page.html', context={
+        'chats': chats,
+        # 'messages': messages
+    })
+
+
+@login_required
+def chat_mail_page(request, chat_id):
+    chats = Chats.objects.filter(users__id__icontains=request.user.id).order_by('date_update')
+    messages = Messages.objects.filter(chat__id=chat_id)
+    return render(request, 'main/mail/index_mail_page.html', context={
+        'chats': chats,
+        'messages': messages
+    })
+
+@login_required
+def send_message(request):
+    pass

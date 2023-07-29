@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 # Create your models here.
 
 
@@ -77,9 +78,51 @@ class Tasks(models.Model):
     deadline = models.DateTimeField(verbose_name='Дедлайн')
 
     class Meta:
-        verbose_name = 'задачу  '
+        verbose_name = 'задачу'
         verbose_name_plural = 'Задачи'
     
     def __str__(self) -> str:
         return self.task[:20]
+
+
+class Chats(models.Model):
+
+    types = (
+        ('private', 'Приватный'),
+        ('public', 'Публичный'),
+        ('channel', 'Канал')
+    )
+
+    date_created = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
+    date_update = models.DateTimeField(verbose_name='Дата изменения', auto_now=True, blank=True, 
+                                       editable=True)
+    users = models.ManyToManyField(User, verbose_name='Пользователи')
+    type = models.CharField(choices=types, max_length=100, default=types[0][0])
+    class Meta:
+        verbose_name = 'чат'
+        verbose_name_plural = 'Чаты'
     
+
+    def create_date_update(self):
+        self.date_update = timezone.now()
+
+    def __str__(self):
+        self.create_date_update()
+        return str(self.id)
+
+
+class Messages(models.Model):
+
+    chat = models.ForeignKey(Chats, on_delete=models.DO_NOTHING, verbose_name='Чат')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Пользователь')
+    text = models.TextField(max_length=2000, verbose_name='Сообщение')
+    send_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
+    edit_date = models.DateTimeField(null=True, blank=True, verbose_name='Дата изменения')
+    is_pin = models.BooleanField(verbose_name='Закреплено', default=False)
+
+    class Meta:
+        verbose_name = 'сообщение'
+        verbose_name_plural = 'Сообщения'
+
+    def __str__(self):
+        return f'{self.chat.id} | [{self.user.username}] {self.text[:100]}'

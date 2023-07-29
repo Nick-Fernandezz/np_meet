@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+
+.messager {
+    background: #399494;
+    height: 90vh;
+}
+
+.message-chat {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.chats-col {
+    background: #2ea5a5;
+    border-right: 1px #fff solid;
+}
+
+.chats-table {
+    width: 100%;
+}
+
+.chat-item {
+    background: #fff;
+}
+
+.send-message input {
+    width: 89%;
+}
+
+.send-message button {
+    width: 10%;
+}

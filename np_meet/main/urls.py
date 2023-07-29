@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('company/create/', views.create_comp_page, name='create_comp_page'),
     path('company/profile/<int:comp_id>/', views.company_profile_page, name='company_profil_page'),
-    path('company/workers/profile/<int:user_id>/fire/>', views.fire_worker, name='fire_worker'),
+    path('company/workers/profile/<int:user_id>/fire/', views.fire_worker, name='fire_worker'),
 
     # Workers
 
@@ -38,5 +38,11 @@ urlpatterns = [
     path('company/workers/tasks/task/create/', views.create_task_page, name='create_task_page'),
     path('company/workers/tasks/task/<int:task_id>/', views.detal_task_page, name='detal_task_page'),
     path('company/workers/tasks/task/<int:task_id>/hide/', views.hide_task, name='hide_task'),
+
+    # Mail
+
+    path('mail/chat/<int:chat_id>/', views.chat_mail_page, name='chat_mail_page'),
+    path('mail/', views.mail_page, name='mail_page'),
+
 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
