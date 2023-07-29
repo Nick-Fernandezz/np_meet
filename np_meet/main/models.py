@@ -30,8 +30,8 @@ class CorpPositions(models.Model):
 class User(AbstractUser):
 
     avatar = models.ImageField(upload_to='main/users/avatars', default='main/users/avatars/default.webp')
-    birth_date = models.DateField(null=True, blank=True)
-    phone = models.CharField(max_length=20, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
+    phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Номер телефона')
     position = models.ManyToManyField(CorpPositions, blank=True)
     corporation = models.ForeignKey(Corporations, on_delete=models.CASCADE, null=True, blank=True)
     reg_ip = models.GenericIPAddressField(verbose_name='IP при регистрации', blank=True, null=True)

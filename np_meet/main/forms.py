@@ -52,6 +52,9 @@ class EditUserForm(ModelForm):
                   'last_name', 
                   'birth_date',
                   'phone')
+        widgets = {
+            'avatar': forms.FileInput(attrs={'form': 'edit_worker_profile', 'onchange':"document.getElementById('edit_worker_profile').submit()"})
+        }
         
 
 class CreateTaskForm(ModelForm):
