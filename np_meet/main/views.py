@@ -10,6 +10,8 @@ from logs.models import *
 from .forms import *
 from .scripts.random_invite_code import random_code
 from django.contrib.auth.decorators import login_required
+from .views_scripts import auth as auth_scripts
+from .views_scripts import log as log_scripts
 # from django.http.response import HttpResponseNotFound
 
 
@@ -38,18 +40,8 @@ def singup_user_page(request):
                     password=request.POST['password1'],
                     
                 )
-                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-                ip = ''
-                if x_forwarded_for:
-                    ip = x_forwarded_for.split(',')[0]
-                else:
-                    ip = request.META.get('REMOTE_ADDR')
-                user.reg_ip, user.last_ip = ip, ip
-                log_auth = LogAuthUser.objects.create(
-                    user=user,
-                    do='Зарегистрировался'
-                )
-                log_auth.save()
+                user.reg_ip, user.last_ip = auth_scripts.get_ip(request), auth_scripts.get_ip(request)
+                log_scripts.create_log_auth(request, 'Зарегистрировался')
                 user.save()
                 login(request, user)
                 return redirect('home_page')
@@ -70,12 +62,7 @@ def singup_user_page(request):
 @login_required
 def logoutuser(request):
     if request.method == 'POST':
-        log_auth = LogAuthUser.objects.create(
-                    company=request.user.corporation,
-                    user=request.user,
-                    do='Вышел из аккаунта'
-                )
-        log_auth.save()
+        log_scripts.create_log_auth(request, 'Вышел из аккаунта')
         logout(request)
         return redirect('home_page')
 
@@ -89,26 +76,15 @@ def login_user_page(request):
             return render(request, 'main/login_user_page.html', context={'form': AuthenticationForm(), 
                                                                          'error': 'Пользователь с таким именем не найден'})
         else:
-            log_auth = LogAuthUser.objects.create(
-                    company=user.corporation,
-                    user=user,
-                    do='Авторизировался'
-                )
-            log_auth.save()
+            log_scripts.create_log_auth(request, 'Авторизировался', user=user)
             login(request, user)
             return redirect('control_palen_page')
 
 @login_required
 def control_palen_page(request):
-    log_auth = LogAuthUser.objects.create(
-                    company=request.user.corporation,
-                    user=request.user,
-                    do='Зашел в контрольную панель'
-                )
-    log_auth.save()
+    log_scripts.create_log_auth(request, 'Зашел в контрольную панель')
     try:
         corp = Corporations.objects.get(name=request.user.corporation.name)
-        # print(corp)
         return render(request, 'main/contol_panel_page.html', context={
         'corp': corp})
     except ObjectDoesNotExist:
@@ -163,22 +139,13 @@ def profile_page(request, user_id):
 @login_required
 def delete_worker_invite(request, invite_id):
     invite = CompInvites.objects.get(id=invite_id)
-    log = LogsInvites.objects.create(
-            company=request.user.corporation,
-            creator=request.user,
-            code=invite.code,
-            do='Удалил приглашение'
-
-        )
-    log.save()
+    log_scripts.create_log_invite(request, 'Удалил приглашение', invite.code)
     invite.delete()
-    # print(invite.code)
     return redirect('company_workers_page')
 
 @login_required
 def create_worker_invite(request):
     if request.method == 'GET':
-        
         return render(request, 'main/create_worker_invite.html', context={
             'form': CreateWorckerInviteForm()
         })
@@ -187,25 +154,13 @@ def create_worker_invite(request):
         max_activations = int(request.POST.get('max_activations'))
         if 0 < max_activations <= 250:
 
-            
-
             new_invite = CompInvites.objects.create(
                 company=request.user.corporation, 
                 max_activations=max_activations,
                 creator=request.user,
                 code=random_code()
                 ) 
-            log = LogsInvites.objects.create(
-                company=request.user.corporation,
-                creator=request.user,
-                code=new_invite.code,
-                do='Создал приглашение'
-
-            )
-            log.save()
-            # new_invite.max_activations = max_activationsForm
-            # new_invite.company = request.user.comporation
-            # new_invite.creator = request.user
+            log_scripts.create_log_invite(request, 'Создал приглашение', new_invite.code)
             new_invite.save()
             return redirect('company_workers_page')
         else:
@@ -229,16 +184,10 @@ def join_worker_invite(request):
                     invite.activations = invite.activations + 1
                     user_comp = User.objects.get(username=request.user.username)
                     user_comp.corporation = invite.company
-                    log = LogsInvites.objects.create(
-                        company=user_comp.corporation,
-                        creator=invite.creator,
-                        code=invite.code,
-                        do='Создал приглашение'
-
-                    )
-                    log.save()
-                    invite.save()
                     user_comp.save()
+                    log_scripts.create_log_invite(request, 'Принял приглашение', invite.code, invite.creator)
+                    invite.save()
+                    
                     return redirect('control_palen_page')
                 else:
                     return render(request, 'main/join_worker_invite_page.html', context={
@@ -250,6 +199,9 @@ def join_worker_invite(request):
                             'form': JoinWorkerInviteForm(),
                             'error': 'Код не существует',
                         })
+
+
+## ДОБАВИТЬ ЛОГИРОВАНИЕ УВОЛЬНЕНИЙ
 
 @login_required
 def fire_worker(request, user_id):
@@ -285,13 +237,11 @@ def company_profile_page(request, comp_id):
 def edit_worker_profile(request):
     if request.method == 'GET':
         form = EditUserForm(instance=request.user)
-        print(request.user.id)
         return render(request, 'main/edit_worker_profile_page.html', context={
             'form': form
         })
     else:
         form = EditUserForm(data=request.POST, files=request.FILES, instance=request.user)
-        print(form)
         if form.is_valid():
             form.save()
             return redirect('control_palen_page')
@@ -340,6 +290,9 @@ def detal_task_page(request, task_id):
     task = get_object_or_404(Tasks, company=request.user.corporation, worker=request.user, id=task_id)
     if request.method == 'GET':
         task.is_new = False
+        log_scripts.create_log_tasks(request,
+                                     text=f'Просмотрел задачу #7')
+        
         task.save()
         return render(request, 'main/tasks/detal_task_page.html', context={
             'task': task,
@@ -347,12 +300,8 @@ def detal_task_page(request, task_id):
         })
     else:
         status = request.POST['status']
-        log = LogTasks(
-                company=request.user.corporation,
-                user=request.user,
-                do=f'Изменил статус задачи #{task.id} c {task.status} на {status}'
-                )
-        log.save()
+        log_scripts.create_log_tasks(request,
+                                     text=f'Изменил статус задачи #{task.id} c {task.status} на {status}')
         task.status = status
         task.save()
         return render(request, 'main/tasks/detal_task_page.html', context={
@@ -365,12 +314,8 @@ def hide_task(request, task_id):
     if request.method == 'POST':
         task = get_object_or_404(Tasks, company=request.user.corporation, worker=request.user, id=task_id)
         task.active = False
-        log = LogTasks(
-                company=request.user.corporation,
-                user=request.user,
-                do=f'Скрыл задачу #{task.id}'
-                )
-        log.save()
+        log_scripts.create_log_tasks(request,
+                                     text=f'Скрыл задачу #{task.id}')
         task.save()
         return redirect('index_tasks_page')
 
@@ -398,12 +343,8 @@ def create_task_page(request):
             newtask = userform.save(commit=False)
             newtask.creator = request.user
             newtask.company = request.user.corporation
-            log = LogTasks(
-                company=newtask.company,
-                user=newtask.creator,
-                do=f'Создал задачу для @{newtask.worker.username}'
-                )
-            log.save()
+            log_scripts.create_log_tasks(request,
+                                     text=f'Создал задачу для @{newtask.worker.username}')
             newtask.save()
             return redirect('index_tasks_page')
 
